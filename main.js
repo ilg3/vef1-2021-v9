@@ -1,6 +1,8 @@
 // TODO importa því sem nota þarf
 
 /** Fjöldi frétta til að birta á forsíðu */
+import {createCategoryBackLink,fetchAndRenderCategory,fetchAndRenderLists
+} from "./lib/ui.js";
 const CATEGORY_ITEMS_ON_FRONTPAGE = 5;
 
 /** Vísun í <main> sem geymir allt efnið og við búum til element inn í */
@@ -18,6 +20,14 @@ function route() {
   // Ef svo er, birtum fréttir fyrir þann flokk
 
   // Annars birtum við „forsíðu“
+  var url = window.location.search;
+  const cat = new URLSearchParams(url).get("cat");
+  if(cat){
+  fetchAndRenderCategory(cat, main);
+  createCategoryBackLink(main, CATEGORY_ITEMS_ON_FRONTPAGE)}
+  else if(!cat)
+  fetchAndRenderLists(main, CATEGORY_ITEMS_ON_FRONTPAGE);
+
 }
 
 /**
@@ -25,7 +35,7 @@ function route() {
  * vafra. Sjáum þá um að birta réttan skjá.
  */
 window.onpopstate = () => {
-  // TODO útfæra
+  fetchAndRenderLists(main, CATEGORY_ITEMS_ON_FRONTPAGE);
 };
 
 // Í fyrsta skipti sem vefur er opnaður birtum við það sem beðið er um út frá URL
